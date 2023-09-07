@@ -34,6 +34,7 @@ setup(
         'pytest >= 7.4.1',
         'mypy >= 1.5.1',
         'isort >= 5.12.0',
+        'types-Pillow >=10.0.0.3',
     ],
     license='MIT',
     classifiers=[
