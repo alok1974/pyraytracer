@@ -2,7 +2,6 @@
 from distutils.core import setup
 from glob import glob
 
-
 PACKAGE_NAME = 'pyraytracer'
 PACKAGE_VERSION = '0.0.0'
 
@@ -30,8 +29,11 @@ setup(
     install_requires=[
         'numpy >= 1.25.2',
         'Pillow >= 10.0.0',
+        'pydantic >= 2.3.0',
         'pydantic_core >= 2.6.1',
         'pytest >= 7.4.1',
+        'mypy >= 1.5.1',
+        'isort >= 5.12.0',
     ],
     license='MIT',
     classifiers=[
