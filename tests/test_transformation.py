@@ -37,7 +37,7 @@ def generate_random_srt() -> Tuple[Vec3, Vec3, Vec3]:
     return translation, rotation, scale
 
 
-@pytest.mark.parametrize("translation, rotation, scale", [generate_random_srt() for _ in range(100)])
+@pytest.mark.parametrize("translation, rotation, scale", [generate_random_srt() for _ in range(500)])
 def test_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
     t1 = Transformation()
     t1.translation = translation
@@ -55,7 +55,7 @@ def test_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
     assert np.allclose(t1.matrix, t2.matrix, atol=1e-4), f'{t1.matrix}\n{t2.matrix}'
 
 
-@pytest.mark.parametrize("translation, rotation, scale", [generate_random_srt() for _ in range(100)])
+@pytest.mark.parametrize("translation, rotation, scale", [generate_random_srt() for _ in range(500)])
 def test_from_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
     t1 = Transformation()
     t1.translation = translation
@@ -67,7 +67,7 @@ def test_from_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
     assert t1 == t2
 
 
-@pytest.mark.parametrize("translation, rotation, scale", [generate_random_srt() for _ in range(100)])
+@pytest.mark.parametrize("translation, rotation, scale", [generate_random_srt() for _ in range(500)])
 def test_to_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
     t1 = Transformation()
     t1.translation = translation
