@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Tuple
 
 import numpy as np
-from pydantic import BaseModel, PrivateAttr, ValidationError, model_validator
+from pydantic import BaseModel, PrivateAttr
 
 from .vec3 import Vec3
 
@@ -13,13 +13,6 @@ class Transformation(BaseModel):
     _rotation: Vec3 = PrivateAttr(default=Vec3(x=0, y=0, z=0))
     _translation: Vec3 = PrivateAttr(default=Vec3(x=0, y=0, z=0))
     _data: np.ndarray[Any, np.dtype[np.floating[Any]]] = PrivateAttr(default=np.eye(4))
-
-    @model_validator(mode='after')  # type: ignore
-    def validate_data(self) -> None:
-        if any([v < 1 for v in self._scale.to_tuple()]):
-            raise ValidationError(
-                f'scale values {self._scale} cannot be less than 1'
-            )
 
     @classmethod
     def from_srt(cls, srt: Tuple[Vec3, Vec3, Vec3]):
@@ -95,6 +88,10 @@ class Transformation(BaseModel):
 
     @scale.setter
     def scale(self, value: Vec3) -> None:
+        if any([v < 1 for v in value.to_tuple()]):
+            raise ValueError(
+                f'scale values {value} cannot be less than 1'
+            )
         self._scale = value
         self._set_srt()
 
