@@ -29,7 +29,7 @@ def generate_random_srt() -> Tuple[Vec3, Vec3, Vec3]:
     r_z = random.randint(-1000, 1000)
     rotation = Vec3.from_tuple(values=(r_x, r_y, r_z))
 
-    s_x = random.randint(-1, 100)
+    s_x = random.randint(1, 100)
     s_y = random.randint(1, 100)
     s_z = random.randint(1, 100)
     scale = Vec3.from_tuple(values=(s_x, s_y, s_z))
