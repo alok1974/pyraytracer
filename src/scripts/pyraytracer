@@ -1,0 +1,36 @@
+#! /usr/bin/env python
+
+import argparse
+
+from pyraytracer.main import main
+
+parser = argparse.ArgumentParser(
+    prog='pyray',
+    description=(
+        'Creates the raytrace render image from '
+        'the given scene and settings file.'
+    )
+)
+
+parser.add_argument(
+    '-sn',
+    '--scene',
+    help='Scene File Path',
+    required=True
+)
+
+parser.add_argument(
+    '-rs',
+    '--render-settings',
+    help='Render Settings File Path',
+    required=True,
+)
+
+args = parser.parse_args()
+scene_file_path = args.scene
+settings_file_path = args.render_settings
+
+main(
+    scene_file_path=scene_file_path,
+    settings_file_path=settings_file_path,
+)

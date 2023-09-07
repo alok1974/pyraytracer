@@ -1,0 +1,105 @@
+{
+    "camera": {
+        "name": "scene_cam",
+        "look_at": [
+            0,
+            1,
+            10
+        ],
+        "center": [
+            30,
+            15,
+            -20
+        ],
+        "fov": 0.12
+    },
+    "materials": [
+        {
+            "name": "sphere_mat",
+            "color": [
+                34,
+                68,
+                92
+            ],
+            "dispersion": 0.1,
+            "tranparency": 0.5
+        },
+        {
+            "name": "cube_mat",
+            "color": [
+                238,
+                126,
+                214
+            ],
+            "dispersion": 0.2
+        }
+    ],
+    "spheres": [
+        {
+            "name": "sphere",
+            "radius": 2,
+            "center": [
+                -1,
+                1,
+                6
+            ],
+            "material": "sphere_mat"
+        }
+    ],
+    "cubes": [
+        {
+            "name": "cube",
+            "side": 2,
+            "center": [
+                2,
+                3,
+                8
+            ],
+            "material": "cube_mat"
+        }
+    ],
+    "lights": [
+        {
+            "name": "key",
+            "center": [
+                -3,
+                3,
+                -10
+            ]
+        },
+        {
+            "name": "rim",
+            "center": [
+                24,
+                0,
+                30
+            ],
+            "intensity": 3
+        },
+        {
+            "name": "fill",
+            "center": [
+                8,
+                -10,
+                23
+            ]
+        },
+        {
+            "name": "cube_top",
+            "center": [
+                2,
+                20,
+                8
+            ],
+            "intensity": 0.6
+        }
+    ],
+    "light_linking": [
+        {
+            "name": "cube_top",
+            "include": [
+                "cube"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,295 @@
+{
+    "camera": {
+        "name": "scene_cam",
+        "look_at": [
+            0.6,
+            0,
+            0
+        ],
+        "center": [
+            8.8,
+            5,
+            -6
+        ]
+    },
+    "materials": [
+        {
+            "name": "sun_diffuse",
+            "color": [255, 155, 0],
+            "random_color_range":[0.7, 1.0]
+        },
+        {
+            "name": "sun_disperse",
+            "color": [
+                255,
+                100,
+                0
+            ],
+            "random_color_range": [
+                0.7,
+                1.0
+            ],
+            "dispersion": 0.85
+        },
+        {
+            "name": "mercury_diffuse",
+            "color": [
+                169,
+                169,
+                169
+            ]
+        },
+        {
+            "name": "venus_diffuse",
+            "color": [
+                225,
+                225,
+                224
+            ]
+        },
+        {
+            "name": "earth_diffuse",
+            "color": [
+                0,
+                128,
+                255
+            ]
+        },
+        {
+            "name": "mars_diffuse",
+            "color": [
+                204,
+                102,
+                0
+            ]
+        },
+        {
+            "name": "jupiter_diffuse",
+            "color": [
+                189,
+                183,
+                107
+            ],
+            "random_color_range": [
+                0.7,
+                1.0
+            ]
+        },
+        {
+            "name": "saturn_diffuse",
+            "color": [
+                238,
+                221,
+                130
+            ],
+            "random_color_range": [
+                0.7,
+                1.0
+            ]
+        },
+        {
+            "name": "uranus_diffuse",
+            "color": [
+                173,
+                216,
+                230
+            ],
+            "random_color_range": [
+                0.7,
+                1.0
+            ]
+        },
+        {
+            "name": "neptune_diffuse",
+            "color": [
+                70,
+                130,
+                180
+            ],
+            "random_color_range": [
+                0.7,
+                1.0
+            ]
+        }
+    ],
+    "spheres": [
+        {
+            "name": "sun",
+            "center": [
+                -6.8,
+                0,
+                5
+            ],
+            "radius": 4,
+            "material": "sun_diffuse"
+        },
+        {
+            "name": "solar_winds",
+            "center": [
+                -6.7,
+                0,
+                5
+            ],
+            "radius": 4.17,
+            "material": "sun_disperse"
+        },
+        {
+            "name": "mercury",
+            "center": [
+                -2.27,
+                0,
+                5
+            ],
+            "radius": 0.07,
+            "material": "mercury_diffuse"
+        },
+        {
+            "name": "venus",
+            "center": [
+                -1.94,
+                0,
+                5
+            ],
+            "radius": 0.14,
+            "material": "venus_diffuse"
+        },
+        {
+            "name": "earth",
+            "center": [
+                -1.54,
+                0,
+                5
+            ],
+            "radius": 0.15,
+            "material": "earth_diffuse"
+        },
+        {
+            "name": "mars",
+            "center": [
+                -1.21,
+                0,
+                5
+            ],
+            "radius": 0.076,
+            "material": "mars_diffuse"
+        },
+        {
+            "name": "jupiter",
+            "center": [
+                -0.43,
+                0,
+                5
+            ],
+            "radius": 0.6,
+            "material": "jupiter_diffuse"
+        },
+        {
+            "name": "saturn",
+            "center": [
+                0.81,
+                0,
+                5
+            ],
+            "radius": 0.54,
+            "material": "saturn_diffuse"
+        },
+        {
+            "name": "uranus",
+            "center": [
+                1.73,
+                0,
+                5
+            ],
+            "radius": 0.3,
+            "material": "saturn_diffuse"
+        },
+        {
+            "name": "neptune",
+            "center": [
+                2.35,
+                0,
+                5
+            ],
+            "radius": 0.22,
+            "material": "neptune_diffuse"
+        }
+    ],
+    "lights": [
+        {
+            "name": "sun_light",
+            "center": [
+                -50,
+                0,
+                5
+            ],
+            "intensity": 6
+        },
+        {
+            "name": "solar_wind_light",
+            "center": [
+                50,
+                0,
+                5
+            ],
+            "intensity": 3
+        },
+        {
+            "name": "rim",
+            "center": [
+                50,
+                -30,
+                -30
+            ],
+            "intensity": 0.8
+        },
+        {
+            "name": "rim",
+            "center": [
+                40,
+                -30,
+                -30
+            ],
+            "intensity": 0.4
+        },
+        {
+            "name": "sun_only_top",
+            "center": [
+                50,
+                350,
+                5
+            ],
+            "intensity": 8
+        },
+        {
+            "name": "sun_only_bottom",
+            "center": [
+                50,
+                -260,
+                5
+            ],
+            "intensity": 5
+        }
+    ],
+    "light_linking": [
+        {
+            "name": "sun_only_top",
+            "include": [
+                "sun",
+                "solar_winds"
+            ]
+        },
+        {
+            "name": "sun_only_bottom",
+            "include": [
+                "sun",
+                "solar_winds"
+            ]
+        },
+        {
+            "name": "solar_wind_light",
+            "include": [
+                "solar_winds"
+            ]
+        }
+    ]
+}

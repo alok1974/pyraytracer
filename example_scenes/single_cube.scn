@@ -1,0 +1,56 @@
+{
+    "camera": {
+        "name": "scene_cam",
+        "look_at": [
+            0,
+            0,
+            20
+        ],
+        "center": [
+            10,
+            10,
+            10
+        ]
+    },
+    "materials": [
+        {
+            "name": "red",
+            "color": [
+                255,
+                20,
+                40
+            ]
+        }
+    ],
+    "cubes": [
+        {
+            "name": "c_1",
+            "center": [
+                0,
+                0,
+                20
+            ],
+            "side": 3,
+            "material": "red"
+        }
+    ],
+    "lights": [
+        {
+            "name": "key",
+            "center": [
+                8,
+                20,
+                8
+            ],
+            "intensity": 1
+        }
+    ],
+    "light_linking": [
+        {
+            "name": "key",
+            "include": [
+                "c_1"
+            ]
+        }
+    ]
+}

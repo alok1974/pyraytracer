@@ -1,0 +1,32 @@
+{
+    "output_path": "/Users/alok/Desktop/renders/solar_system.png",
+    "image_width": 600,
+    "image_height": 340,
+    "bg_color": [18, 8, 12],
+
+    "add_circular_noise": true,
+    "circular_noise_scale": 0.8,
+    "circular_noise_color_min": 180,
+    "circular_noise_color_max": 255,
+    "circular_noise_size_min": 0.01,
+    "circular_noise_size_max": 0.03,
+
+    "add_tail_noise": true,
+    "tail_noise_scale": 2,
+    "tail_noise_color_min": 200,
+    "tail_noise_color_max": 255,
+    "tail_noise_size_min": 0.01,
+    "tail_noise_size_max": 0.015,
+    "tail_noise_width": 48,
+    "tail_noise_angle_min": -20,
+    "tail_noise_angle_max": 20,
+
+    "add_pixel_noise": true,
+    "pixel_noise_scale": 0.06,
+    "pixel_noise_color_min": 100,
+    "pixel_noise_color_max": 255,
+
+    "interactive_render": true,
+    "close_interactive_render": false
+
+}

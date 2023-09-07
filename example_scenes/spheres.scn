@@ -1,0 +1,94 @@
+{
+    "camera": {
+        "name": "scene_cam",
+        "look_at": [
+            0,
+            0,
+            8
+        ],
+        "center": [
+            0,
+            0,
+            -1
+        ]
+    },
+    "materials": [
+        {
+            "name": "red",
+            "color": [255, 20, 40]
+        },
+        {
+            "name": "green",
+            "color": [0, 255, 0],
+            "random_color_range": [0.7, 1.0]
+        },
+        {
+            "name": "blue",
+            "color": [0, 83, 200]
+        },
+        {
+            "name": "pink",
+            "color": [255, 192, 203],
+            "dispersion": 0.5
+        }
+    ],
+    "spheres": [
+        {
+            "name": "sphere_1",
+            "center": [1, 0, 8],
+            "radius": 1.5,
+            "material": "red"
+        },
+        {
+            "name": "sphere_2",
+            "center": [-1, 0, 7],
+            "radius": 1,
+            "material": "green"
+        },
+        {
+            "name": "sphere_3",
+            "center": [-0.5, 0.5, 6],
+            "radius": 0.5,
+            "material": "blue"
+        },
+        {
+            "name": "sphere_4",
+            "center": [-3, -0.5, 8],
+            "radius": 0.5,
+            "material": "pink"
+        }
+    ],
+    "lights": [
+        {
+            "name": "key",
+            "center": [-5, 5, -10],
+            "intensity": 1
+        },
+        {
+            "name": "rim",
+            "center": [4, 10, 20],
+            "intensity": 5
+        },
+        {
+            "name": "fill",
+            "center": [3, -2, 4],
+            "color": [0, 100, 255],
+            "intensity": 0.6
+        }
+    ],
+    "light_linking":
+    [
+        {
+            "name": "key",
+            "include" : ["sphere_3", "sphere_2", "sphere_4"]
+        },
+        {
+            "name": "rim",
+            "include": ["sphere_1", "sphere_2", "sphere_3", "sphere_4"]
+        },
+        {
+            "name": "fill",
+            "exclude": ["sphere_2", "sphere_4"]
+        }
+    ]
+}
