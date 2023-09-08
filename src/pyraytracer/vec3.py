@@ -46,6 +46,16 @@ class Vec3(BaseModel):
             z=self.z * other,
         )
 
+    def __truediv__(self, other: Any) -> Vec3:
+        if not isinstance(other, (float, int)):
+            raise ValueError(f"Unsupported type for multiplication: {type(other).__name__}")
+
+        return self.__class__(
+            x=self.x / other,
+            y=self.y / other,
+            z=self.z / other,
+        )
+
     def __rmul__(self, other: Any) -> Vec3:
         return self.__mul__(other)
 
