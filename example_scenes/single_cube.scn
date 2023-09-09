@@ -7,9 +7,9 @@
             20
         ],
         "center": [
-            10,
-            10,
-            10
+            0,
+            0,
+            -20
         ]
     },
     "materials": [
@@ -25,32 +25,39 @@
     "cubes": [
         {
             "name": "c_1",
-            "center": [
-                0,
-                0,
-                20
-            ],
-            "side": 3,
-            "material": "red"
+            "material": "red",
+            "center": [0, 0, 20],
+            "scale": [2, 3, 4],
+            "rotation": [45, -30, 10]
         }
     ],
     "lights": [
         {
-            "name": "key",
+            "name": "l1",
             "center": [
-                8,
-                20,
-                8
+                100,
+                100,
+                -100
+            ],
+            "intensity": 2
+        },
+        {
+            "name": "l2",
+            "center": [
+                -5,
+                -200,
+                -200
             ],
             "intensity": 1
-        }
-    ],
-    "light_linking": [
+        },
         {
-            "name": "key",
-            "include": [
-                "c_1"
-            ]
+            "name": "l3",
+            "center": [
+                -5,
+                10,
+                3
+            ],
+            "intensity": 1
         }
     ]
 }

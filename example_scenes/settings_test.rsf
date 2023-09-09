@@ -1,7 +1,7 @@
 {
     "output_path": "/Users/alok/Desktop/renders/render_480x270.png",
-    "image_width": 480,
-    "image_height": 270,
+    "image_width": 300,
+    "image_height": 170,
     "aa_samples": 1.0,
     "bg_color": [
         18,
@@ -12,5 +12,5 @@
     "add_tail_noise": false,
     "add_pixel_noise": false,
     "interactive_render": true,
-    "close_interactive_render": true
+    "close_interactive_render": false
 }

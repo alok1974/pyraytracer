@@ -49,7 +49,6 @@
     "cubes": [
         {
             "name": "cube",
-            "side": 2,
             "center": [
                 2,
                 3,
