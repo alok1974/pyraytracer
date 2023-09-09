@@ -1,101 +1,171 @@
-from typing import Optional, Tuple
+from enum import Enum, auto, unique
+from typing import Dict, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, PrivateAttr, model_validator
 
 from .color import Color
 from .hittable import Hittable
 from .material import Material
+from .transformation import Transformation
 from .vec3 import Vec3
+
+
+@unique
+class CubePlanes(Enum):
+    right = auto()
+    left = auto()
+    top = auto()
+    bottom = auto()
+    front = auto()
+    back = auto()
 
 
 class Cube(BaseModel, Hittable):
     name: str
-    cube_center: Vec3 = Field(alias='center')  # For internal use only
-    side: float
+    cube_center: Vec3 = Field(alias='center', default=Vec3(x=0, y=0, z=0))
+    cube_scale: Vec3 = Field(alias='scale', default=Vec3(x=1, y=1, z=1))
+    cube_rotation: Vec3 = Field(alias='rotation', default=Vec3(x=0, y=0, z=0))
     cube_material: Material = Field(
         default=Material(name='gray', color=Color(r=127, b=127, g=127)),
         alias='material',
     )  # For internal use only
+
+    # Private fields
+    _transform: Transformation = PrivateAttr(default=Transformation())
+    _right: float = PrivateAttr()
+    _left: float = PrivateAttr()
+    _top: float = PrivateAttr()
+    _bottom: float = PrivateAttr()
+    _front: float = PrivateAttr()
+    _back: float = PrivateAttr()
+    _planes: Dict[CubePlanes, float] = PrivateAttr()
+    _epsilon: float = PrivateAttr(default=1e-6)
+
+    @model_validator(mode='after')  # type: ignore
+    def init_transform(self):
+        self._transform.scale = self.scale
+        self._transform.rotation = self.rotation
+        self._transform.translation = self.center
+
+        self._right = self.scale.x / 2
+        self._left = -1 * self.scale.x / 2
+        self._top = self.scale.y / 2
+        self._bottom = -1 * self.scale.y / 2
+        self._front = -1 * self.scale.z / 2
+        self._back = self.scale.z / 2
+
+        # Planes of the cube using Vec3 representation
+        self._planes = {
+            CubePlanes.right: self._right,
+            CubePlanes.left: self._left,
+            CubePlanes.top: self._top,
+            CubePlanes.bottom: self._bottom,
+            CubePlanes.front: self._front,
+            CubePlanes.back: self._back,
+        }
 
     @property
     def center(self) -> Vec3:
         return self.cube_center
 
     @property
+    def scale(self) -> Vec3:
+        return self.cube_scale
+
+    @property
+    def rotation(self) -> Vec3:
+        return self.cube_rotation
+
+    @property
     def material(self) -> Material:
         return self.cube_material
 
-    def get_t(self, ray: Vec3, ray_origin: Vec3) -> Optional[float]:
-        t_min, t_max = self._compute_t_min_max(ray.x, ray_origin.x, self.center.x)
-        if t_min is None or t_max is None:
-            return None
+    @property
+    def transform(self) -> Transformation:
+        return self._transform
 
-        ty_min, ty_max = self._compute_t_min_max(ray.y, ray_origin.y, self.center.y)
-        if ty_min is None or ty_max is None:
-            return None
-
-        if (t_min > ty_max) or (ty_min > t_max):
-            return None
-
-        t_min = max(t_min, ty_min)
-        t_max = min(t_max, ty_max)
-
-        tz_min, tz_max = self._compute_t_min_max(ray.z, ray_origin.z, self.center.z)
-        if tz_min is None or tz_max is None:
-            return None
-
-        if (t_min > tz_max) or (tz_min > t_max):
-            return None
-
-        t_min = max(t_min, tz_min)
-
-        if t_min < 0:
-            return None
-
-        return t_min
-
-    def _compute_t_min_max(
+    def _calculate_t(
             self,
-            ray_value: float,
-            ray_origin_value: float,
-            center_value: float
-    ) -> Tuple[Optional[float], Optional[float]]:
+            plane_name: CubePlanes,
+            ray: Vec3,
+            ray_origin: Vec3
+    ) -> Optional[float]:
+        plane_to_component = {
+            CubePlanes.right: (ray.x, ray_origin.x),
+            CubePlanes.left: (ray.x, ray_origin.x),
+            CubePlanes.top: (ray.y, ray_origin.y),
+            CubePlanes.bottom: (ray.y, ray_origin.y),
+            CubePlanes.front: (ray.z, ray_origin.z),
+            CubePlanes.back: (ray.z, ray_origin.z),
+        }
 
-        if ray_value == 0:
-            if ray_origin_value < center_value - self.side / 2 or ray_origin_value > center_value + self.side / 2:
-                return None, None
-            return float('-inf'), float('inf')
-        t_min = (center_value - self.side / 2 - ray_origin_value) / ray_value
-        t_max = (center_value + self.side / 2 - ray_origin_value) / ray_value
+        ray_component, ray_origin_component = plane_to_component[plane_name]
+        if ray_component == 0:
+            return None
 
-        if t_min > t_max:
-            t_min, t_max = t_max, t_min
+        return (self._planes[plane_name] - ray_origin_component) / ray_component
 
-        return t_min, t_max
+    def get_t(self, ray: Vec3, ray_origin: Vec3) -> Optional[float]:
+        # Object Space AABB implementation
+
+        closest_t = float('inf')
+
+        # Iterate through the planes and find intersections
+        for plane_name in self._planes:
+            t = self._calculate_t(
+                plane_name=plane_name,
+                ray=ray,
+                ray_origin=ray_origin
+            )
+
+            if t is None:
+                continue
+
+            # Calculate potential intersection point using the ray's equation
+            hit = Vec3(
+                x=ray_origin.x + t * ray.x,
+                y=ray_origin.y + t * ray.y,
+                z=ray_origin.z + t * ray.z,
+            )
+
+            # Check if the intersection point lies
+            # within the boundaries of the cube's face
+            e = self._epsilon
+            in_x = self._left - e <= hit.x <= self._right + e
+            in_y = self._bottom - e <= hit.y <= self._top + e
+            in_z = self._front - e <= hit.z <= self._back + e
+
+            if in_x and in_y and in_z:
+                # Ensure positive t value and closest intersection
+                if t < closest_t and t > 0:
+                    closest_t = t
+
+        return closest_t if closest_t != float('inf') else None
 
     def get_normal(self, hit_point: Vec3) -> Vec3:
         # A small value to handle potential floating-point inaccuracies
         epsilon = 0.0001
 
         # Check x-planes
-        if abs(hit_point.x - self.center.x - self.side / 2) < epsilon:
+        if abs(hit_point.x - self._right) < epsilon:
             return Vec3(x=1, y=0, z=0)
 
-        if abs(hit_point.x - self.center.x + self.side / 2) < epsilon:
+        if abs(hit_point.x - self._left) < epsilon:
             return Vec3(x=-1, y=0, z=0)
 
         # Check y-planes
-        if abs(hit_point.y - self.center.y - self.side / 2) < epsilon:
+        if abs(hit_point.y - self._top) < epsilon:
             return Vec3(x=0, y=1, z=0)
 
-        if abs(hit_point.y - self.center.y + self.side / 2) < epsilon:
+        if abs(hit_point.y - self._bottom) < epsilon:
             return Vec3(x=0, y=-1, z=0)
 
         # Check z-planes
-        if abs(hit_point.z - self.center.z - self.side / 2) < epsilon:
-            return Vec3(x=0, y=0, z=1)
-        if abs(hit_point.z - self.center.z + self.side / 2) < epsilon:
+        if abs(hit_point.z - self._front) < epsilon:
             return Vec3(x=0, y=0, z=-1)
+
+        if abs(hit_point.z - self._back) < epsilon:
+            return Vec3(x=0, y=0, z=1)
 
         # If none of the above cases match (which shouldn't happen),
         # return a default normal
