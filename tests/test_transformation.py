@@ -89,15 +89,7 @@ def test_to_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
 
 def test_local_to_global() -> None:
     local_point = Vec3.from_tuple(values=(0, 1, 0))
-    local_point_xfo = Transformation.from_srt(
-        srt=(
-            Vec3.from_tuple(values=(1, 1, 1)),
-            Vec3.from_tuple(values=(0, 0, 0)),
-            local_point,
-        ),
-    )
-
-    xfo = Transformation.from_srt(
+    t = Transformation.from_srt(
         srt=(
             Vec3.from_tuple(values=(1, 1, 1)),
             Vec3.from_tuple(values=(0, 0, 0)),
@@ -105,22 +97,14 @@ def test_local_to_global() -> None:
         ),
     )
 
-    global_point_xfo = xfo @ local_point_xfo
+    global_point = t.local_to_global(point=local_point)
     expected_global_point = Vec3.from_tuple(values=(0, 0, 0))
-    assert global_point_xfo.translation == expected_global_point
+    assert global_point == expected_global_point
 
 
 def test_global_to_local() -> None:
     global_point = Vec3.from_tuple(values=(0, 1, 0))
-    global_point_xfo = Transformation.from_srt(
-        srt=(
-            Vec3.from_tuple(values=(1, 1, 1)),
-            Vec3.from_tuple(values=(0, 0, 0)),
-            global_point,
-        ),
-    )
-
-    xfo = Transformation.from_srt(
+    t = Transformation.from_srt(
         srt=(
             Vec3.from_tuple(values=(1, 1, 1)),
             Vec3.from_tuple(values=(0, 0, 0)),
@@ -128,6 +112,25 @@ def test_global_to_local() -> None:
         ),
     )
 
-    local_point_xfo = global_point_xfo @ xfo.inverse
+    local_point = t.global_to_local(point=global_point)
     expected_global_point = Vec3.from_tuple(values=(0, 2, 0))
-    assert local_point_xfo.translation == expected_global_point
+    assert local_point == expected_global_point
+
+
+def test_is_default() -> None:
+    t = Transformation()
+    assert t.is_default
+
+    s = Transformation()
+    s.translation = Vec3(x=0, y=0, z=0)
+    s.rotation = Vec3(x=0, y=0, z=0)
+    s.scale = Vec3(x=1, y=1, z=1)
+
+    assert s.is_default
+
+    r = Transformation()
+    r.translation = Vec3(x=10, y=20, z=30)
+    r.rotation = Vec3(x=45, y=90, z=135)
+    r.scale = Vec3(x=2, y=3, z=4)
+
+    assert not r.is_default

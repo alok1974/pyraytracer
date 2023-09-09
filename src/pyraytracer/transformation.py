@@ -27,6 +27,10 @@ class Transformation(BaseModel):
         return self.scale, self.rotation, self.translation
 
     @property
+    def is_default(self) -> bool:
+        return np.allclose(self.matrix, np.eye(4), atol=1e-4)
+
+    @property
     def translation(self) -> Vec3:
         tx, ty, tz = self._data[3, 0], self._data[3, 1], self._data[3, 2]
         return Vec3(x=tx, y=ty, z=tz)
@@ -105,6 +109,32 @@ class Transformation(BaseModel):
         t = self.__class__()
         t._data = inverse_data
         return t
+
+    def global_to_local(self, point: Vec3) -> Vec3:
+        # Tranform global ray direction to cube object space
+        global_point = Transformation.from_srt(
+            srt=(
+                Vec3.from_tuple(values=(1, 1, 1)),  # scale
+                Vec3.from_tuple(values=(1, 1, 1)),  # rotation
+                Vec3.from_tuple(values=point.to_tuple()),  # translation
+            )
+        )
+        local_point = global_point @ self.inverse
+
+        return local_point.translation
+
+    def local_to_global(self, point: Vec3) -> Vec3:
+        # Tranform global ray direction to cube object space
+        point_local = Transformation.from_srt(
+            srt=(
+                Vec3.from_tuple(values=(1, 1, 1)),  # scale
+                Vec3.from_tuple(values=(1, 1, 1)),  # rotation
+                Vec3.from_tuple(values=point.to_tuple()),  # translation
+            )
+        )
+        point_global = point_local @ self
+
+        return point_global.translation
 
     def _set_srt(self) -> None:
         self._data = np.eye(4)
