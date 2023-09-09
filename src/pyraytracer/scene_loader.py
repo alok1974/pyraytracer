@@ -36,6 +36,8 @@ class ObjectAttrs(Enum):
     RADIUS = 'radius'
     INTENSITY = 'intensity'
     LOOK_AT = 'look_at'
+    SCALE = 'scale'
+    ROTATION = 'rotation'
 
 
 class SceneValidationError(Exception):
@@ -364,12 +366,26 @@ class SceneLoader:
                 f'data:\n{json.dumps(object_data, indent=4)}')
             return object_data, False
 
-        object_data, center_updated = self._update_center_data(
+        object_data, center_updated = self._update_vector_data(
+            attr_key=ObjectAttrs.CENTER.value,
             object_data=object_data,
             object_cls=object_cls,
         )
 
-        object_data, look_at_updated = self._update_look_at_data(
+        object_data, look_at_updated = self._update_vector_data(
+            attr_key=ObjectAttrs.LOOK_AT.value,
+            object_data=object_data,
+            object_cls=object_cls,
+        )
+
+        object_data, scale_updated = self._update_vector_data(
+            attr_key=ObjectAttrs.SCALE.value,
+            object_data=object_data,
+            object_cls=object_cls,
+        )
+
+        object_data, rotation_updated = self._update_vector_data(
+            attr_key=ObjectAttrs.ROTATION.value,
             object_data=object_data,
             object_cls=object_cls,
         )
@@ -387,6 +403,8 @@ class SceneLoader:
         all_updated = all(
             [
                 center_updated,
+                scale_updated,
+                rotation_updated,
                 look_at_updated,
                 color_updated,
                 material_updated
@@ -395,84 +413,44 @@ class SceneLoader:
 
         return object_data, all_updated
 
-    def _update_center_data(
+    def _update_vector_data(
             self,
+            attr_key: str,
             object_data: dict,
             object_cls: Type,
     ) -> Tuple[Dict, bool]:
-
-        if ObjectAttrs.CENTER.value not in object_data:
+        if attr_key not in object_data:
             return object_data, True
 
-        center_data = object_data[ObjectAttrs.CENTER.value]
+        attr_data = object_data[attr_key]
         if (
-            not isinstance(center_data, list)
-            or len(center_data) != 3
-            or not all([isinstance(t, (float, int)) for t in center_data])
+            not isinstance(attr_data, list)
+            or len(attr_data) != 3
+            or not all([isinstance(t, (float, int)) for t in attr_data])
         ):
             self._errors.append(
-                f'The field "{ObjectAttrs.CENTER.value}" of '
+                f'The field "{attr_key}" of '
                 f'{object_cls.__name__} "{object_data[ObjectAttrs.NAME.value]}" '
-                f'should be a list of 3 numbers, got {center_data}'
+                f'should be a list of 3 numbers, got {attr_data}'
             )
             return object_data, False
 
         try:
-            x, y, z = center_data
+            x, y, z = attr_data
             center = Vec3(x=x, y=y, z=z)
         except ValidationError as e:
             object_type = object_cls.__name__
             object_name = object_data[ObjectAttrs.NAME.value]
             self._errors.append(
                 f'{object_type} "{object_name}" '
-                f'needs a field {ObjectAttrs.CENTER.value}='
+                f'needs a field {attr_key}='
                 f'{Vec3.__name__}({x}, {y}, {z}) but there were following '
                 f' validation errors while creating an object_data '
                 f'of {Vec3.__name__}: \n{e}'
             )
             return object_data, False
         else:
-            object_data[ObjectAttrs.CENTER.value] = center
-            return object_data, True
-
-    def _update_look_at_data(
-            self,
-            object_data: dict,
-            object_cls: Type,
-    ) -> Tuple[Dict, bool]:
-
-        if ObjectAttrs.LOOK_AT.value not in object_data:
-            return object_data, True
-
-        look_at_data = object_data[ObjectAttrs.LOOK_AT.value]
-        if (
-            not isinstance(look_at_data, list)
-            or len(look_at_data) != 3
-            or not all([isinstance(t, (float, int)) for t in look_at_data])
-        ):
-            self._errors.append(
-                f'The field "{ObjectAttrs.LOOK_AT.value}" of '
-                f'{object_cls.__name__} "{object_data[ObjectAttrs.NAME.value]}" '
-                f'should be a list of 3 numbers, got {look_at_data}'
-            )
-            return object_data, False
-
-        try:
-            x, y, z = look_at_data
-            look_at = Vec3(x=x, y=y, z=z)
-        except ValidationError as e:
-            object_type = object_cls.__name__
-            object_name = object_data[ObjectAttrs.NAME.value]
-            self._errors.append(
-                f'{object_type} "{object_name}" '
-                f'needs a field {ObjectAttrs.LOOK_AT.value}='
-                f'{Vec3.__name__}({x}, {y}, {z}) but there were following '
-                f' validation errors while creating an object_data '
-                f'of {Vec3.__name__}: \n{e}'
-            )
-            return object_data, False
-        else:
-            object_data[ObjectAttrs.LOOK_AT.value] = look_at
+            object_data[attr_key] = center
             return object_data, True
 
     def _update_color_data(
