@@ -49,8 +49,8 @@ class Sphere(BaseModel, Hittable):
         self._transform.rotation = self.rotation
 
     def get_t(self, ray: Vec3, ray_origin: Vec3) -> Optional[float]:
-        radius = 1  # radius is 1 unit in object space
-        center = Vec3(x=0, y=0, z=0)  # center at origin in object space
+        radius = self.transform.scale.x if self.transform.has_uniform_scale else 1.0
+        center = self.center if self.no_transform_needed else Vec3(x=0, y=0, z=0)
         oc = ray_origin - center
         a = Vec3.dot(ray, ray)
         b = 2 * Vec3.dot(oc, ray)
@@ -68,12 +68,12 @@ class Sphere(BaseModel, Hittable):
             return t
 
     def get_normal(self, hit_point: Vec3) -> Vec3:
-        center = Vec3(x=0, y=0, z=0)  # center at origin in object space
+        center = self.center if self.no_transform_needed else Vec3(x=0, y=0, z=0)
         normal = hit_point - center
         inv_scale = Vec3(
-            x=1/self.scale.x,
-            y=1/self.scale.y,
-            z=1/self.scale.z,
+            x=1 / self.scale.x,
+            y=1 / self.scale.y,
+            z=1 / self.scale.z,
         )
         adjusted_normal = Vec3.element_wise_product(a=normal, b=inv_scale)
 

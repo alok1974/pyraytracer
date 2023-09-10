@@ -15,6 +15,8 @@ class HitData(BaseModel):
 
 
 class Hittable(ABC):
+    _no_transform_needed: Optional[bool] = None
+
     @abstractproperty
     def center(self) -> Vec3:
         raise NotImplementedError
@@ -34,6 +36,17 @@ class Hittable(ABC):
     @abstractproperty
     def rotation(self) -> Vec3:
         raise NotImplementedError
+
+    @property
+    def no_transform_needed(self) -> bool:
+        if self._no_transform_needed is None:
+            no_rot_uni_scale = (
+                self.transform.has_zero_rotations
+                and self.transform.has_uniform_scale
+            )
+            self._no_transform_needed = self.transform.is_default or no_rot_uni_scale
+
+        return self._no_transform_needed
 
     def get_hit_data(self, ray: Vec3, ray_origin: Vec3) -> HitData:
         ray_t, ray_origin_t = self._ray_global_to_local(
@@ -62,9 +75,7 @@ class Hittable(ABC):
 
         hittable_transform: Transform = self.transform
 
-        if hittable_transform.is_default:
-            # No need to transform ray if hittable has no transform set
-            # saves a lot of compute for matrix operations.
+        if self.no_transform_needed:
             return ray, ray_origin
 
         # First tranform ray origin to local space
@@ -100,9 +111,7 @@ class Hittable(ABC):
         else:
             local_normal = self.get_normal(hit_point=local_point)
 
-        if hittable_transform.is_default:
-            # No need to transform ray if hittable has no transform set
-            # saves a lot of compute for matrix operations.
+        if self.no_transform_needed:
             return local_point, local_normal
 
         point = hittable_transform.local_to_global(point=local_point)
