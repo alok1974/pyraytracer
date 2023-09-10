@@ -4,7 +4,7 @@ from typing import Optional, Tuple
 from pydantic import BaseModel
 
 from .material import Material
-from .transformation import Transformation
+from .transform import Transform
 from .vec3 import Vec3
 
 
@@ -28,7 +28,7 @@ class Hittable(ABC):
         raise NotImplementedError
 
     @abstractproperty
-    def transform(self) -> Transformation:
+    def transform(self) -> Transform:
         raise NotImplementedError
 
     @abstractproperty
@@ -60,7 +60,7 @@ class Hittable(ABC):
             ray_origin: Vec3
     ) -> Tuple[Vec3, Vec3]:
 
-        hittable_transform: Transformation = self.transform
+        hittable_transform: Transform = self.transform
 
         if hittable_transform.is_default:
             # No need to transform ray if hittable has no transform set
@@ -90,7 +90,7 @@ class Hittable(ABC):
             ray_origin: Vec3
     ) -> Tuple[Vec3, Optional[Vec3]]:
 
-        hittable_transform: Transformation = self.transform
+        hittable_transform: Transform = self.transform
 
         local_point = ray_origin + (ray * t)
 

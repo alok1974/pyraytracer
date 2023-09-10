@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field, PrivateAttr, model_validator
 from .color import Color
 from .hittable import Hittable
 from .material import Material
-from .transformation import Transformation
+from .transform import Transform
 from .vec3 import Vec3
 
 
@@ -31,7 +31,7 @@ class Cube(BaseModel, Hittable):
     )  # For internal use only
 
     # Private fields
-    _transform: Transformation = PrivateAttr(default=Transformation())
+    _transform: Transform = PrivateAttr(default=Transform())
     _right: float = PrivateAttr()
     _left: float = PrivateAttr()
     _top: float = PrivateAttr()
@@ -81,7 +81,7 @@ class Cube(BaseModel, Hittable):
         return self.cube_material
 
     @property
-    def transform(self) -> Transformation:
+    def transform(self) -> Transform:
         return self._transform
 
     def _calculate_t(

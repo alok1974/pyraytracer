@@ -8,7 +8,7 @@ from pydantic import BaseModel, PrivateAttr
 from .vec3 import Vec3
 
 
-class Transformation(BaseModel):
+class Transform(BaseModel):
     _scale: Vec3 = PrivateAttr(default=Vec3(x=1, y=1, z=1))
     _rotation: Vec3 = PrivateAttr(default=Vec3(x=0, y=0, z=0))
     _translation: Vec3 = PrivateAttr(default=Vec3(x=0, y=0, z=0))
@@ -106,7 +106,7 @@ class Transformation(BaseModel):
         return self._data
 
     @property
-    def inverse(self) -> Transformation:
+    def inverse(self) -> Transform:
         inverse_data = np.linalg.inv(self._data)
         t = self.__class__()
         t._data = inverse_data
@@ -114,7 +114,7 @@ class Transformation(BaseModel):
 
     def global_to_local(self, point: Vec3) -> Vec3:
         # Tranform global ray direction to cube object space
-        global_point = Transformation.from_srt(
+        global_point = Transform.from_srt(
             srt=(
                 Vec3.from_tuple(values=(1, 1, 1)),  # scale
                 Vec3.from_tuple(values=(1, 1, 1)),  # rotation
@@ -127,7 +127,7 @@ class Transformation(BaseModel):
 
     def local_to_global(self, point: Vec3) -> Vec3:
         # Tranform global ray direction to cube object space
-        point_local = Transformation.from_srt(
+        point_local = Transform.from_srt(
             srt=(
                 Vec3.from_tuple(values=(1, 1, 1)),  # scale
                 Vec3.from_tuple(values=(1, 1, 1)),  # rotation
@@ -180,7 +180,7 @@ class Transformation(BaseModel):
         self._data[1, :-1] *= self._scale.y
         self._data[2, :-1] *= self._scale.z
 
-    def __matmul__(self, other: Any) -> Transformation:
+    def __matmul__(self, other: Any) -> Transform:
         if not isinstance(other, self.__class__):
             raise ValueError(f'Expecting type {self.__class__.__name__} got {type(other)}')
 

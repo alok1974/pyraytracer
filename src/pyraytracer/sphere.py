@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field, PrivateAttr, model_validator
 from .color import Color
 from .hittable import Hittable
 from .material import Material
-from .transformation import Transformation
+from .transform import Transform
 from .vec3 import Vec3
 
 
@@ -20,7 +20,7 @@ class Sphere(BaseModel, Hittable):
         alias='material',
     )  # For internal use only
 
-    _transform: Transformation = PrivateAttr(default=Transformation())
+    _transform: Transform = PrivateAttr(default=Transform())
 
     @property
     def center(self) -> Vec3:
@@ -39,7 +39,7 @@ class Sphere(BaseModel, Hittable):
         return self.sphere_material
 
     @property
-    def transform(self) -> Transformation:
+    def transform(self) -> Transform:
         return self._transform
 
     @model_validator(mode='after')  # type: ignore

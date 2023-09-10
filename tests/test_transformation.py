@@ -5,7 +5,7 @@ from typing import Tuple
 import numpy as np
 import pytest
 
-from pyraytracer.transformation import Transformation
+from pyraytracer.transform import Transform
 from pyraytracer.vec3 import Vec3
 
 
@@ -39,7 +39,7 @@ def generate_random_srt() -> Tuple[Vec3, Vec3, Vec3]:
 
 @pytest.mark.parametrize("translation, rotation, scale", [generate_random_srt() for _ in range(500)])
 def test_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
-    t1 = Transformation()
+    t1 = Transform()
     t1.translation = translation
     t1.rotation = rotation
     t1.scale = scale
@@ -48,7 +48,7 @@ def test_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
     assert scale == t1.scale
 
     res_rotation = t1.rotation
-    t2 = Transformation()
+    t2 = Transform()
     t2.translation = translation
     t2.scale = scale
     t2.rotation = res_rotation
@@ -57,19 +57,19 @@ def test_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
 
 @pytest.mark.parametrize("translation, rotation, scale", [generate_random_srt() for _ in range(500)])
 def test_from_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
-    t1 = Transformation()
+    t1 = Transform()
     t1.translation = translation
     t1.rotation = rotation
     t1.scale = scale
 
-    t2 = Transformation.from_srt(srt=(scale, rotation, translation))
+    t2 = Transform.from_srt(srt=(scale, rotation, translation))
 
     assert t1 == t2
 
 
 @pytest.mark.parametrize("translation, rotation, scale", [generate_random_srt() for _ in range(500)])
 def test_to_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
-    t1 = Transformation()
+    t1 = Transform()
     t1.translation = translation
     t1.rotation = rotation
     t1.scale = scale
@@ -79,7 +79,7 @@ def test_to_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
     assert r_scale == scale
     assert r_translation == translation
 
-    t2 = Transformation()
+    t2 = Transform()
     t2.translation = r_translation
     t2.rotation = r_rotation
     t2.scale = r_scale
@@ -89,7 +89,7 @@ def test_to_srt(translation: Vec3, rotation: Vec3, scale: Vec3) -> None:
 
 def test_local_to_global() -> None:
     local_point = Vec3.from_tuple(values=(0, 1, 0))
-    t = Transformation.from_srt(
+    t = Transform.from_srt(
         srt=(
             Vec3.from_tuple(values=(1, 1, 1)),
             Vec3.from_tuple(values=(0, 0, 0)),
@@ -104,7 +104,7 @@ def test_local_to_global() -> None:
 
 def test_global_to_local() -> None:
     global_point = Vec3.from_tuple(values=(0, 1, 0))
-    t = Transformation.from_srt(
+    t = Transform.from_srt(
         srt=(
             Vec3.from_tuple(values=(1, 1, 1)),
             Vec3.from_tuple(values=(0, 0, 0)),
@@ -118,17 +118,17 @@ def test_global_to_local() -> None:
 
 
 def test_is_default() -> None:
-    t = Transformation()
+    t = Transform()
     assert t.is_default
 
-    s = Transformation()
+    s = Transform()
     s.translation = Vec3(x=0, y=0, z=0)
     s.rotation = Vec3(x=0, y=0, z=0)
     s.scale = Vec3(x=1, y=1, z=1)
 
     assert s.is_default
 
-    r = Transformation()
+    r = Transform()
     r.translation = Vec3(x=10, y=20, z=30)
     r.rotation = Vec3(x=45, y=90, z=135)
     r.scale = Vec3(x=2, y=3, z=4)
