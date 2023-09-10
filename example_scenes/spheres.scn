@@ -36,25 +36,25 @@
         {
             "name": "sphere_1",
             "center": [1, 0, 8],
-            "radius": 1.5,
+            "scale": [1.5, 1.5, 1.5],
             "material": "red"
         },
         {
             "name": "sphere_2",
             "center": [-1, 0, 7],
-            "radius": 1,
+            "scale": [1, 1, 1],
             "material": "green"
         },
         {
             "name": "sphere_3",
             "center": [-0.5, 0.5, 6],
-            "radius": 0.5,
+            "scale": [0.5, 0.5, 0.5],
             "material": "blue"
         },
         {
             "name": "sphere_4",
             "center": [-3, -0.5, 8],
-            "radius": 0.5,
+            "scale": [0.5, 0.5, 0.5],
             "material": "pink"
         }
     ],

@@ -33,7 +33,6 @@ class ObjectAttrs(Enum):
     EXCLUDE = 'exclude'
     COLOR = 'color'
     CENTER = 'center'
-    RADIUS = 'radius'
     INTENSITY = 'intensity'
     LOOK_AT = 'look_at'
     SCALE = 'scale'

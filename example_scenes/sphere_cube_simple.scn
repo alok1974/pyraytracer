@@ -37,7 +37,7 @@
     "spheres": [
         {
             "name": "sphere",
-            "radius": 2,
+            "scale": [2, 2, 2],
             "center": [
                 -1,
                 1,
