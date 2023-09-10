@@ -5,15 +5,17 @@ from PIL import Image, ImageTk
 
 
 class InteractiveRenderWindow:
+    TITLE = 'Interactive Render'
+
     def __init__(self, image: Image.Image, close_after_rendering: bool = False) -> None:
         # Create the main tkinter window
         self._image = image
         self._close_after_rendering = close_after_rendering
 
         self._root = tk.Tk()
-        self._root.title("Interactive Renderer")
+        self._root.title(self.TITLE)
 
-        self._root.protocol("WM_DELETE_WINDOW", self._disable_close)
+        self._root.protocol('WM_DELETE_WINDOW', self._disable_close)
 
         # Convert the PIL image to a PhotoImage and display it
         self._tk_image = ImageTk.PhotoImage(self._image)
@@ -58,7 +60,7 @@ class InteractiveRenderWindow:
 
     def on_rendering_complete(self) -> None:
         # Re-enable the close button
-        self._root.protocol("WM_DELETE_WINDOW", self._root.destroy)
+        self._root.protocol('WM_DELETE_WINDOW', self._root.destroy)
 
         # Automatically close the window
         if self._close_after_rendering:
