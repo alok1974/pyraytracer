@@ -1,0 +1,60 @@
+{
+    "camera": {
+        "name": "scene_cam",
+        "look_at": [
+            -10,
+            -10,
+            20
+        ],
+        "center": [
+            2,
+            2,
+            -4
+        ]
+    },
+    "materials": [
+        {
+            "name": "red",
+            "color": [
+                255,
+                20,
+                40
+            ]
+        }
+    ],
+    "cubes": [
+        {
+            "name": "c_1",
+            "material": "red"
+        }
+    ],
+    "lights": [
+        {
+            "name": "l1",
+            "center": [
+                100,
+                100,
+                -100
+            ],
+            "intensity": 1.5
+        },
+        {
+            "name": "l2",
+            "center": [
+                -5,
+                -200,
+                -200
+            ],
+            "intensity": 0.5
+        },
+        {
+            "name": "l3",
+            "center": [
+                -5,
+                10,
+                3
+            ],
+            "intensity": 1
+        }
+    ]
+}

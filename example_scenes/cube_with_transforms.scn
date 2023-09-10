@@ -1,0 +1,63 @@
+{
+    "camera": {
+        "name": "scene_cam",
+        "look_at": [
+            0,
+            0,
+            20
+        ],
+        "center": [
+            0,
+            0,
+            -20
+        ]
+    },
+    "materials": [
+        {
+            "name": "red",
+            "color": [
+                255,
+                20,
+                40
+            ]
+        }
+    ],
+    "cubes": [
+        {
+            "name": "c_1",
+            "material": "red",
+            "center": [0, 0, 20],
+            "scale": [2, 3, 4],
+            "rotation": [45, -30, 10]
+        }
+    ],
+    "lights": [
+        {
+            "name": "l1",
+            "center": [
+                100,
+                100,
+                -100
+            ],
+            "intensity": 2
+        },
+        {
+            "name": "l2",
+            "center": [
+                -5,
+                -200,
+                -200
+            ],
+            "intensity": 1
+        },
+        {
+            "name": "l3",
+            "center": [
+                -5,
+                10,
+                3
+            ],
+            "intensity": 1
+        }
+    ]
+}
