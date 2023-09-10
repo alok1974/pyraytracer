@@ -1,36 +1,61 @@
 from typing import Optional
 
 import numpy as np
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator, PrivateAttr
+
 
 from .color import Color
 from .hittable import Hittable
 from .material import Material
 from .vec3 import Vec3
+from .transformation import Transformation
 
 
 class Sphere(BaseModel, Hittable):
     name: str
-    sphere_center: Vec3 = Field(alias='center')  # For internal use only
-    radius: float
+    sphere_center: Vec3 = Field(alias='center', default=Vec3(x=0, y=0, z=0))
+    sphere_scale: Vec3 = Field(alias='scale', default=Vec3(x=1, y=1, z=1))
+    sphere_rotation: Vec3 = Field(alias='rotation', default=Vec3(x=0, y=0, z=0))
     sphere_material: Material = Field(
         default=Material(name='gray', color=Color(r=127, b=127, g=127)),
         alias='material',
     )  # For internal use only
+
+    _transform: Transformation = PrivateAttr(default=Transformation())
 
     @property
     def center(self) -> Vec3:
         return self.sphere_center
 
     @property
+    def scale(self) -> Vec3:
+        return self.sphere_scale
+
+    @property
+    def rotation(self) -> Vec3:
+        return self.sphere_rotation
+
+    @property
     def material(self) -> Material:
         return self.sphere_material
 
+    @property
+    def transform(self) -> Transformation:
+        return self._transform
+
+    @model_validator(mode='after')  # type: ignore
+    def init_transform(self):
+        self._transform.scale = self.scale
+        self._transform.translation = self.center
+        self._transform.rotation = self.rotation
+
     def get_t(self, ray: Vec3, ray_origin: Vec3) -> Optional[float]:
-        oc = ray_origin - self.center
+        radius = 1  # radius is 1 unit in object space
+        center = Vec3(x=0, y=0, z=0)  # center at origin in object space
+        oc = ray_origin - center
         a = Vec3.dot(ray, ray)
         b = 2 * Vec3.dot(oc, ray)
-        c = Vec3.dot(oc, oc) - (self.radius * self.radius)
+        c = Vec3.dot(oc, oc) - (radius * radius)
         discriminant = b * b - 4 * a * c
 
         if discriminant < 0:
@@ -44,4 +69,13 @@ class Sphere(BaseModel, Hittable):
             return t
 
     def get_normal(self, hit_point: Vec3) -> Vec3:
-        return hit_point - self.center
+        center = Vec3(x=0, y=0, z=0)  # center at origin in object space
+        normal = hit_point - center
+        inv_scale = Vec3(
+            x=1/self.scale.x,
+            y=1/self.scale.y,
+            z=1/self.scale.z,
+        )
+        adjusted_normal = Vec3.element_wise_product(a=normal, b=inv_scale)
+
+        return Vec3.normalize(v=adjusted_normal)
