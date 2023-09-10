@@ -12,6 +12,7 @@ class Transformation(BaseModel):
     _scale: Vec3 = PrivateAttr(default=Vec3(x=1, y=1, z=1))
     _rotation: Vec3 = PrivateAttr(default=Vec3(x=0, y=0, z=0))
     _translation: Vec3 = PrivateAttr(default=Vec3(x=0, y=0, z=0))
+    _epsilon: float = PrivateAttr(default=1e-4)
     _data: np.ndarray[Any, np.dtype[np.floating[Any]]] = PrivateAttr(default=np.eye(4))
 
     @classmethod
@@ -28,7 +29,7 @@ class Transformation(BaseModel):
 
     @property
     def is_default(self) -> bool:
-        return np.allclose(self.matrix, np.eye(4), atol=1e-4)
+        return np.allclose(self.matrix, np.eye(4), atol=self._epsilon)
 
     @property
     def translation(self) -> Vec3:
@@ -92,9 +93,10 @@ class Transformation(BaseModel):
 
     @scale.setter
     def scale(self, value: Vec3) -> None:
-        if any([v < 1 for v in value.to_tuple()]):
+
+        if any([v < self._epsilon for v in value.to_tuple()]):
             raise ValueError(
-                f'scale values {value} cannot be less than 1'
+                f'scale values {value} cannot be less than {self._epsilon}'
             )
         self._scale = value
         self._set_srt()
@@ -194,7 +196,7 @@ class Transformation(BaseModel):
         if not isinstance(other, self.__class__):
             raise ValueError(f'Expecting type {self.__class__.__name__} got {type(other)}')
 
-        return np.allclose(self.matrix, other.matrix, atol=1e-4)
+        return np.allclose(self.matrix, other.matrix, atol=self._epsilon)
 
     def __neq__(self, other: Any) -> bool:
         return self.matrix != other.matrix
