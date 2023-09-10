@@ -32,6 +32,14 @@ class Transform(BaseModel):
         return np.allclose(self.matrix, np.eye(4), atol=self._epsilon)
 
     @property
+    def has_uniform_scale(self) -> bool:
+        return self.scale.x == self.scale.y == self.scale.z
+
+    @property
+    def has_zero_rotations(self) -> bool:
+        return self.rotation.x == self.rotation.y == self.rotation.z == 0.0
+
+    @property
     def translation(self) -> Vec3:
         tx, ty, tz = self._data[3, 0], self._data[3, 1], self._data[3, 2]
         return Vec3(x=tx, y=ty, z=tz)

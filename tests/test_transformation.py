@@ -134,3 +134,27 @@ def test_is_default() -> None:
     r.scale = Vec3(x=2, y=3, z=4)
 
     assert not r.is_default
+
+
+def test_uniform_scale() -> None:
+    t = Transform()
+    t.scale = Vec3(x=2.43, y=2.43, z=2.43)
+    assert t.has_uniform_scale
+
+
+def test_non_uniform_scale() -> None:
+    t = Transform()
+    t.scale = Vec3(x=1, y=2, z=3)
+    assert not t.has_uniform_scale
+
+
+def test_zero_rotations() -> None:
+    t = Transform()
+    t.rotation = Vec3(x=0, y=0, z=0)
+    assert t.has_zero_rotations
+
+
+def test_non_zero_rotations() -> None:
+    t = Transform()
+    t.rotation = Vec3(x=20, y=30, z=0)
+    assert not t.has_zero_rotations
