@@ -75,6 +75,14 @@ class Vec3(BaseModel):
             return Vec3(x=v.x/v_len, y=v.y/v_len, z=v.z/v_len)
 
     @classmethod
+    def element_wise_product(cls, a: Vec3, b: Vec3) -> Vec3:
+        return Vec3(
+            x=a.x * b.x,
+            y=a.y * b.y,
+            z=a.z * b.z
+        )
+
+    @classmethod
     def cross(cls, a: Vec3, b: Vec3) -> Vec3:
         x = a.y * b.z - a.z * b.y
         y = a.z * b.x - a.x * b.z
