@@ -143,28 +143,25 @@ class Cube(BaseModel, Hittable):
         return closest_t if closest_t != float('inf') else None
 
     def get_normal(self, hit_point: Vec3) -> Vec3:
-        # A small value to handle potential floating-point inaccuracies
-        epsilon = 0.0001
-
         # Check x-planes
-        if abs(hit_point.x - self._right) < epsilon:
+        if abs(hit_point.x - self._right) < self._epsilon:
             return Vec3(x=1, y=0, z=0)
 
-        if abs(hit_point.x - self._left) < epsilon:
+        if abs(hit_point.x - self._left) < self._epsilon:
             return Vec3(x=-1, y=0, z=0)
 
         # Check y-planes
-        if abs(hit_point.y - self._top) < epsilon:
+        if abs(hit_point.y - self._top) < self._epsilon:
             return Vec3(x=0, y=1, z=0)
 
-        if abs(hit_point.y - self._bottom) < epsilon:
+        if abs(hit_point.y - self._bottom) < self._epsilon:
             return Vec3(x=0, y=-1, z=0)
 
         # Check z-planes
-        if abs(hit_point.z - self._front) < epsilon:
+        if abs(hit_point.z - self._front) < self._epsilon:
             return Vec3(x=0, y=0, z=-1)
 
-        if abs(hit_point.z - self._back) < epsilon:
+        if abs(hit_point.z - self._back) < self._epsilon:
             return Vec3(x=0, y=0, z=1)
 
         # If none of the above cases match (which shouldn't happen),
