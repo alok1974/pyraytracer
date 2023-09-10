@@ -14,8 +14,6 @@ def test_sphere_hit_data() -> None:
     ray_origin = Vec3(x=0, y=0, z=-2.5)
     hit_data = sphere.get_hit_data(ray=ray, ray_origin=ray_origin)
 
-    print(f'{hit_data=}')
-
     assert hit_data.t == 0.25
     assert hit_data.point == Vec3(x=0, y=0, z=-2.0)
     assert hit_data.normal == Vec3(x=0, y=0, z=-1.0)
