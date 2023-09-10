@@ -522,17 +522,3 @@ class SceneLoader:
             for object_data in self._scene_data.get(scene_key, [])
             if ObjectAttrs.NAME.value in object_data
         ]
-
-
-if __name__ == '__main__':
-    scene_file_path = Path(
-        Path(__file__).parent,
-        'scene_data',
-        'example_cube_scene_01.json',
-    )
-
-    scene = SceneLoader(scene_file_path=scene_file_path).scene
-    cam = scene.camera
-    print(cam.forward)
-    print(cam.right)
-    print(cam.upward)
