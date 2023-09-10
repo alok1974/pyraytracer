@@ -27,7 +27,7 @@
         {
             "name": "sphere",
             "material": "red",
-            "scale": [1.4, 1, 1],
+            "scale": [0.5, 0.0000002, 1],
             "rotation": [-10, 10, 20]
         }
     ],

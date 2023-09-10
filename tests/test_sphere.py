@@ -7,7 +7,7 @@ def test_sphere_hit_data() -> None:
         name='sphere',
         center=Vec3.from_tuple(values=(0, 0, 0)),
         rotation=Vec3.from_tuple(values=(0, 0, 0)),
-        scale=Vec3.from_tuple(values=(2, 2, 2)),
+        scale=Vec3.from_tuple(values=(0.4, 2, 2)),
     )
 
     ray = Vec3.from_tuple(values=(0, 0, 1))
