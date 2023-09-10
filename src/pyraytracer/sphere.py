@@ -1,14 +1,13 @@
 from typing import Optional
 
 import numpy as np
-from pydantic import BaseModel, Field, model_validator, PrivateAttr
-
+from pydantic import BaseModel, Field, PrivateAttr, model_validator
 
 from .color import Color
 from .hittable import Hittable
 from .material import Material
-from .vec3 import Vec3
 from .transformation import Transformation
+from .vec3 import Vec3
 
 
 class Sphere(BaseModel, Hittable):
