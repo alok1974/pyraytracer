@@ -1,0 +1,45 @@
+{
+    "camera": {
+        "name": "scene_cam",
+        "look_at": [
+            0,
+            0,
+            0
+        ],
+        "center": [
+            0,
+            0,
+            -5
+        ]
+    },
+    "materials": [
+        {
+            "name": "red",
+            "color": [
+                255,
+                20,
+                40
+            ],
+            "is_constant": false
+        }
+    ],
+    "spheres": [
+        {
+            "name": "sphere",
+            "material": "red",
+            "scale": [1.4, 1, 1],
+            "rotation": [-10, 10, 20]
+        }
+    ],
+    "lights": [
+        {
+            "name": "l1",
+            "center": [
+                3,
+                0,
+                -11
+            ],
+            "intensity": 1.5
+        }
+    ]
+}

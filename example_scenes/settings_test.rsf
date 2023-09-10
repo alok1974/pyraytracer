@@ -1,7 +1,7 @@
 {
-    "output_path": "/Users/alok/Desktop/renders/render_480x270.png",
-    "image_width": 300,
-    "image_height": 170,
+    "output_path": "/Users/alok/Desktop/renders/render_test.png",
+    "image_width": 100,
+    "image_height": 57,
     "aa_samples": 1.0,
     "bg_color": [
         18,
