@@ -120,7 +120,7 @@
                 0,
                 5
             ],
-            "radius": 4,
+            "scale": [4, 4, 4],
             "material": "sun_diffuse"
         },
         {
@@ -130,7 +130,7 @@
                 0,
                 5
             ],
-            "radius": 4.17,
+            "scale": [4.17, 4.17, 4.17],
             "material": "sun_disperse"
         },
         {
@@ -140,7 +140,7 @@
                 0,
                 5
             ],
-            "radius": 0.07,
+            "scale": [0.07, 0.07, 0.07],
             "material": "mercury_diffuse"
         },
         {
@@ -150,7 +150,7 @@
                 0,
                 5
             ],
-            "radius": 0.14,
+            "scale": [0.14, 0.14, 0.14],
             "material": "venus_diffuse"
         },
         {
@@ -160,7 +160,7 @@
                 0,
                 5
             ],
-            "radius": 0.15,
+            "scale": [0.15, 0.15, 0.15],
             "material": "earth_diffuse"
         },
         {
@@ -170,7 +170,7 @@
                 0,
                 5
             ],
-            "radius": 0.076,
+            "scale": [0.076, 0.076, 0.076],
             "material": "mars_diffuse"
         },
         {
@@ -180,7 +180,7 @@
                 0,
                 5
             ],
-            "radius": 0.6,
+            "scale": [0.6, 0.6, 0.6],
             "material": "jupiter_diffuse"
         },
         {
@@ -190,7 +190,7 @@
                 0,
                 5
             ],
-            "radius": 0.54,
+            "scale": [0.54, 0.54, 0.54],
             "material": "saturn_diffuse"
         },
         {
@@ -200,7 +200,7 @@
                 0,
                 5
             ],
-            "radius": 0.3,
+            "scale": [0.3, 0.3, 0.3],
             "material": "saturn_diffuse"
         },
         {
@@ -210,7 +210,7 @@
                 0,
                 5
             ],
-            "radius": 0.22,
+            "scale": [0.22, 0.22, 0.22],
             "material": "neptune_diffuse"
         }
     ],
