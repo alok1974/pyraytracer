@@ -1,0 +1,53 @@
+{
+    "camera": {
+        "name": "scene_cam",
+        "look_at": [
+            0,
+            0,
+            0
+        ],
+        "center": [
+            0,
+            0,
+            -8
+        ],
+        "fov": 0.4
+    },
+    "lights": [
+        {
+            "name": "key",
+            "intensity": 2.0,
+            "center": [
+                3,
+                3,
+                -3
+            ]
+        }
+    ],
+    "materials": [
+        {
+            "name": "red",
+            "color": [
+                255,
+                35,
+                69
+            ]
+        }
+    ],
+    "cubes": [
+        {
+            "name": "c_1",
+            "center": [
+                0,
+                0,
+                0
+            ],
+            "scale":[
+                1,
+                2,
+                1
+            ],
+            "material": "red"
+        }
+    ]
+}
