@@ -26,9 +26,9 @@
         {
             "name": "c_1",
             "material": "red",
-            "center": [0, 0, 20],
+            "center": [0, 0, 10],
             "scale": [2, 3, 4],
-            "rotation": [45, -30, 10]
+            "rotation": [45, -45, 10]
         }
     ],
     "lights": [
