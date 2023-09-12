@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Tuple
 
 import numpy as np
 from pydantic import BaseModel, Field, PrivateAttr, model_validator
@@ -21,6 +21,12 @@ class Sphere(BaseModel, Hittable):
     )  # For internal use only
 
     _transform: Transform = PrivateAttr(default=Transform())
+    _radius_and_center: Tuple[Optional[float], Optional[Vec3]] = PrivateAttr(
+        default=(
+            None,
+            None
+        ),
+    )
 
     @property
     def center(self) -> Vec3:
@@ -42,6 +48,14 @@ class Sphere(BaseModel, Hittable):
     def transform(self) -> Transform:
         return self._transform
 
+    @property
+    def radius_and_center(self):
+        radius, center = self._radius_and_center
+        if radius is None or center is None:
+            self._radius_and_center = self._get_radius_center()
+
+        return self._radius_and_center
+
     @model_validator(mode='after')  # type: ignore
     def init_transform(self):
         self._transform.scale = self.scale
@@ -49,8 +63,7 @@ class Sphere(BaseModel, Hittable):
         self._transform.rotation = self.rotation
 
     def get_t(self, ray: Vec3, ray_origin: Vec3) -> Optional[float]:
-        radius = self.transform.scale.x if self.transform.has_uniform_scale else 1.0
-        center = self.center if self.no_transform_needed else Vec3(x=0, y=0, z=0)
+        radius, center = self.radius_and_center
         oc = ray_origin - center
         a = Vec3.dot(ray, ray)
         b = 2 * Vec3.dot(oc, ray)
@@ -68,7 +81,7 @@ class Sphere(BaseModel, Hittable):
             return t
 
     def get_normal(self, hit_point: Vec3) -> Vec3:
-        center = self.center if self.no_transform_needed else Vec3(x=0, y=0, z=0)
+        _, center = self.radius_and_center
         normal = hit_point - center
         inv_scale = Vec3(
             x=1 / self.scale.x,
@@ -78,3 +91,13 @@ class Sphere(BaseModel, Hittable):
         adjusted_normal = Vec3.element_wise_product(a=normal, b=inv_scale)
 
         return Vec3.normalize(v=adjusted_normal)
+
+    def _get_radius_center(self) -> Tuple[float, Vec3]:
+        if self._no_transform_needed:
+            radius = self.transform.scale.x
+            center = self.center
+        else:
+            radius = 1.0
+            center = Vec3(x=0, y=0, z=0)
+
+        return radius, center

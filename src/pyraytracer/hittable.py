@@ -40,11 +40,15 @@ class Hittable(ABC):
     @property
     def no_transform_needed(self) -> bool:
         if self._no_transform_needed is None:
-            no_rot_uni_scale = (
-                self.transform.has_zero_rotations
-                and self.transform.has_uniform_scale
+            no_rot_no_trans_uni_scale = (
+                self.transform.has_uniform_scale
+                and self.transform.has_zero_rotation
+                and self.transform.has_zero_translation
             )
-            self._no_transform_needed = self.transform.is_default or no_rot_uni_scale
+            self._no_transform_needed = (
+                self.transform.is_default
+                or no_rot_no_trans_uni_scale
+            )
 
         return self._no_transform_needed
 
