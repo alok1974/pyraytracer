@@ -134,29 +134,19 @@ class Transform(BaseModel):
 
     def global_to_local(self, point: Vec3) -> Vec3:
         # Tranform global ray direction to cube object space
-        global_point = Transform.from_srt(
-            srt=(
-                Vec3.from_tuple(values=(1, 1, 1)),  # scale
-                Vec3.from_tuple(values=(1, 1, 1)),  # rotation
-                Vec3.from_tuple(values=point.to_tuple()),  # translation
-            )
-        )
-        local_point = global_point @ self.inverse
-
-        return local_point.translation
+        point_arr = point.to_np_array()
+        global_point_arr = np.append(point_arr, 1.)
+        global_point_arr.shape = (1, 4)
+        local_point_arr = (global_point_arr @ self.inverse.matrix)[0, :3]
+        return Vec3.from_np_array(arr=local_point_arr)
 
     def local_to_global(self, point: Vec3) -> Vec3:
         # Tranform global ray direction to cube object space
-        point_local = Transform.from_srt(
-            srt=(
-                Vec3.from_tuple(values=(1, 1, 1)),  # scale
-                Vec3.from_tuple(values=(1, 1, 1)),  # rotation
-                Vec3.from_tuple(values=point.to_tuple()),  # translation
-            )
-        )
-        point_global = point_local @ self
-
-        return point_global.translation
+        point_arr = point.to_np_array()
+        local_point_arr = np.append(point_arr, 1.)
+        local_point_arr.shape = (1, 4)
+        global_point_arr = (local_point_arr @ self.matrix)[0, :3]
+        return Vec3.from_np_array(arr=global_point_arr)
 
     def _set_srt(self) -> None:
         self._data = np.eye(4)
