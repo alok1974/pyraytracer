@@ -148,13 +148,25 @@ def test_non_uniform_scale() -> None:
     assert not t.has_uniform_scale
 
 
-def test_zero_rotations() -> None:
+def test_zero_rotation() -> None:
     t = Transform()
     t.rotation = Vec3(x=0, y=0, z=0)
-    assert t.has_zero_rotations
+    assert t.has_zero_rotation
 
 
-def test_non_zero_rotations() -> None:
+def test_non_zero_rotation() -> None:
     t = Transform()
     t.rotation = Vec3(x=20, y=30, z=0)
-    assert not t.has_zero_rotations
+    assert not t.has_zero_rotation
+
+
+def test_zero_translation() -> None:
+    t = Transform()
+    t.translation = Vec3(x=0, y=0, z=0)
+    assert t.has_zero_translation
+
+
+def test_non_zero_translation() -> None:
+    t = Transform()
+    t.translation = Vec3(x=1, y=2, z=3)
+    assert not t.has_zero_translation

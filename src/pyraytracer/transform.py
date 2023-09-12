@@ -36,8 +36,20 @@ class Transform(BaseModel):
         return self.scale.x == self.scale.y == self.scale.z
 
     @property
-    def has_zero_rotations(self) -> bool:
-        return self.rotation.x == self.rotation.y == self.rotation.z == 0.0
+    def has_zero_rotation(self) -> bool:
+        return (
+            -1 * self._epsilon <= self.rotation.x <= self._epsilon
+            and -1 * self._epsilon <= self.rotation.y <= self._epsilon
+            and -1 * self._epsilon <= self.rotation.z <= self._epsilon
+        )
+
+    @property
+    def has_zero_translation(self) -> bool:
+        return (
+            -1 * self._epsilon <= self.translation.x <= self._epsilon
+            and -1 * self._epsilon <= self.translation.y <= self._epsilon
+            and -1 * self._epsilon <= self.translation.z <= self._epsilon
+        )
 
     @property
     def translation(self) -> Vec3:
