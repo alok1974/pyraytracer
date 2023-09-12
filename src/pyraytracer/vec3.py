@@ -23,11 +23,11 @@ class Vec3(BaseModel):
         return (self.x, self.y, self.z)
 
     @classmethod
-    def from_np_array(cls, arr: np.ndarray[np.dtype[np.floating[Any]]]) -> Vec3:
+    def from_np_array(cls, arr: np.ndarray[Any, np.dtype[np.floating[Any]]]) -> Vec3:
         x, y, z = arr
         return cls(x=x, y=y, z=z)
 
-    def to_np_array(self) -> np.ndarray[np.dtype[np.floating[Any]]]:
+    def to_np_array(self) -> np.ndarray[Any, np.dtype[np.floating[Any]]]:
         return np.array(self.to_tuple())
 
     def __add__(self, other: Vec3) -> Vec3:
