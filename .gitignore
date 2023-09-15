@@ -25,6 +25,7 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
 MANIFEST
 
 # PyInstaller
@@ -137,3 +138,5 @@ dmypy.json
 .DS_Store
 
 Issue.txt
+
+rt3*
